@@ -88,12 +88,12 @@ xbg_tuning_parameters = {
 }
 SGD_parameters = [{ 'loss':['perceptron'],
                     'penalty':['l1', 'l2', 'elasticnet'],
-                    'alpha': np.linspace(1e-2, 1e+2, 20),
+                    'alpha': np.linspace(1e-2, 1e+2, 40),
                     'l1_ratio': np.linspace(1e-1, 1, 5),
                     'epsilon':np.linspace(1e-1, 1, 5)
                 }]
 estimators = [
-    {"context": SGDClassifier(), "tuned_parameters": SGD_parameters, "name": "SGD"},
+    {"context": SGDClassifier(n_iter=50), "tuned_parameters": SGD_parameters, "name": "SGD"},
     {"context": XGBClassifier(), "tuned_parameters": xbg_tuning_parameters, "name": "XGBoost", "tuner": xgbTuner(XGBClassifier(), xbg_tuning_parameters)},
     {"context": EnsembleClassifier(), "name": "EnsembleClassifier"},
     {"context": BaggingClassifier(DecisionTreeClassifier(max_depth=14), max_samples=0.9, max_features=0.5, n_estimators=50), "name": "Bagging Tree"},
