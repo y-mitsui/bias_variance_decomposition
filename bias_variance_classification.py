@@ -1,8 +1,11 @@
-
+#!/usr/bin/env python
 """
+Decompose 0/1 loss into bias variance using meny learning methods in classification
+
 Reference
 http://www-bcf.usc.edu/~gareth/research/bv.pdf
 """
+
 import os
 import numpy as np
 from sklearn.utils import resample
@@ -15,7 +18,17 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from classes.ensemble_classifier import EnsembleClassifier
-from sklearn.model_selection import cross_val_score
+from sklearn.metrics import accuracy_score
+
+def cross_val_score(estimator, sample_X, sample_y):
+    est_y = []
+    true_y = []
+    for train_index, test_index in KFold(sample_X.shape[0], 5):
+        X_train2, X_test2, y_train2, y_test2 = sample_X[train_index], sample_X[test_index], sample_y[train_index], sample_y[test_index]
+        estimator.fit(X_train2, y_train2)
+        est_y.extend(estimator.predict(X_test2).tolist())
+        true_y.extend(y_test2.tolist())
+    return accuracy_score(est_y, true_y)
     
 n_iter = 20
 
@@ -24,7 +37,7 @@ sample_X = dataset[:, 0:8]
 sample_y = dataset[:, 8]
 
 X_train, X_test, y_train, y_test = train_test_split(sample_X, sample_y, test_size=0.2)
-print X_train.shape, X_test.shape
+print "number of sample ", X_train.shape, X_test.shape
 
 estimators = [
     {"context": EnsembleClassifier(), "tuned_parameters": [], "name": "EnsembleClassifier"},
@@ -46,13 +59,13 @@ for estimator in estimators:
             context.fit(sample_X, sample_y)
             if i == 0:
                 print "grid search results:"
-                print context.best_params_
-                print context.best_score_ 
+                print "\tbest_params", context.best_params_
+                print "\tcross_val_score", context.best_score_ 
         else:
             context = estimator["context"]
             context.fit(sample_X, sample_y)
             if i == 0:
-                print cross_val_score(context, sample_X, sample_y, scoring="accuracy")
+                print "cross_val_score", cross_val_score(context, sample_X, sample_y)
                 
         pred[:, i] = context.predict(X_test)
             
