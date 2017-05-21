@@ -15,17 +15,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from classes.ensemble_classifier import EnsembleClassifier
-from sklearn.metrics import accuracy_score
-
-def cross_val_score(estimator, sample_X, sample_y):
-    est_y = []
-    true_y = []
-    for train_index, test_index in KFold(sample_X.shape[0], 5):
-        X_train2, X_test2, y_train2, y_test2 = sample_X[train_index], sample_X[test_index], sample_y[train_index], sample_y[test_index]
-        estimator.fit(X_train2, y_train2)
-        est_y.extend(estimator.predict(X_test2).tolist())
-        true_y.extend(y_test2.tolist())
-    return accuracy_score(est_y, true_y)
+from sklearn.model_selection import cross_val_score
     
 n_iter = 20
 
@@ -62,7 +52,7 @@ for estimator in estimators:
             context = estimator["context"]
             context.fit(sample_X, sample_y)
             if i == 0:
-                print cross_val_score(context, sample_X, sample_y)
+                print cross_val_score(context, sample_X, sample_y, scoring="accuracy")
                 
         pred[:, i] = context.predict(X_test)
             
