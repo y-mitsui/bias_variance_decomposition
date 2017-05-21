@@ -1,5 +1,5 @@
 # bias_variance_decomposition
-* Decompose 0/1 loss and squere loss into bias variance using meny learning methods
+* Decompose 0/1 loss and squere loss into bias variance using many learning methods
 
 ## Usage
 
@@ -11,6 +11,12 @@ python ./bias_variance_classification.py
 ```
 Output  
 ```
+==========XGBoost========
+grid search results:
+	best_params {'reg_alpha': 0.5, 'colsample_bytree': 0.4, 'silent': 1, 'learning_rate': 0.2, 'nthread': -1, 'min_child_weight': 1.0, 'subsample': 0.8, 'reg_lambda': 1.5, 'objective': 'binary:logistic', 'max_depth': 5, 'gamma': 0.2}
+	cross_val_score -0.905531120885
+variance 0.123701298701
+bias 0.25974025974
 ==========EnsembleClassifier========
 cross_val_score 0.889250814332
 variance 0.0801948051948
