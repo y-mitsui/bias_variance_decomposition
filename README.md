@@ -1,6 +1,12 @@
 # bias_variance_decomposition
 * Decompose 0/1 loss and squere loss into bias variance using many learning methods
 
+# requirements
+* xgboost
+* hyperopt
+* scikit-learn
+* numpy
+
 ## Usage
 
 ```
